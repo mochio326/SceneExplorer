@@ -36,6 +36,11 @@ Mayaでシーンファイルを管理する為のエクスプローラです。
 
 ![SceneExplorer](/images/sceneexplorer-screenshot-04.gif)
 
+##その他
+
+ui/SceneExplorer.ui はQtDesigner用のファイルですが、SceneExplorer.pyからは読み込んでません。
+SceneExplorer.py単体で動作する方が使いやすいだろうという事でui→py化して組み込んでます。
+
 ##動作確認
 
 動作確認はMAYA2015でのみ行っています。
