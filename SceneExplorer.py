@@ -579,9 +579,10 @@ def add_bookmark(type, value):
     '''
     option_var_name = get_bookmark_option_var_name(type)
     ls = cmds.optionVar(q=option_var_name)
-    if ls != 0:
-        if value not in ls:
-            ls.append(value)
+    if ls == 0:
+        ls = []
+    if value not in ls:
+        ls.append(value)
     cmds.optionVar(ca=option_var_name)
     [cmds.optionVar(sva=(option_var_name, i)) for i in ls]
     return
@@ -657,7 +658,7 @@ def scene_open(path, set_project):
         add_rectnt_project(project_path)
         add_rectnt_file(path, file_type)
 
-    types = {'.ma': 'mayaAsci', '.mb': 'mayaBinary', '.fbx': 'FBX', '.obj': 'OBJ'}
+    types = {'.ma': 'mayaAscii', '.mb': 'mayaBinary', '.fbx': 'FBX', '.obj': 'OBJ'}
     if path == '':
         return None
     head, tail = os.path.split(path)
