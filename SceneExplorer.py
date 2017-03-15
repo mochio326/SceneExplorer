@@ -167,6 +167,8 @@ class SceneExplorerWeight(MayaQWidgetBaseMixin, QtGui.QDialog, Ui_Form):
 
     def __init__(self, parent=None):
         super(SceneExplorerWeight, self).__init__(parent)
+        #メモリ管理的おまじない
+        self.setAttribute(QtCore.Qt.WA_DeleteOnClose, True)
         self.setupUi(self)
 
         self.dir_model = None
@@ -232,19 +234,21 @@ class SceneExplorerWeight(MayaQWidgetBaseMixin, QtGui.QDialog, Ui_Form):
         if currentpath is None:
             currentpath = r'C:/'
 
-        self.dir_model = QtGui.QFileSystemModel()
+        #フォルダビューではQFileSystemModelだとスクロールが上手く動作しなかった
+        #self.dir_model = QtGui.QFileSystemModel()
+        self.dir_model = QtGui.QDirModel()
         self.dir_model.setFilter(QtCore.QDir.NoDotAndDotDot | QtCore.QDir.AllDirs)
-        self.dir_model.setRootPath(rootpath)
 
         self.view_directory.setModel(self.dir_model)
         self.view_directory.setRootIndex(self.dir_model.index(rootpath))
+        self.view_directory.scrollTo(self.dir_model.index(currentpath), QtGui.QAbstractItemView.PositionAtCenter)
         self.view_directory.setCurrentIndex(self.dir_model.index(currentpath))
         self.view_directory.header().setResizeMode(QtGui.QHeaderView.ResizeToContents)
         self.view_directory.header().setVisible(False)
         self.view_directory.hideColumn(3)
         self.view_directory.hideColumn(2)
         self.view_directory.hideColumn(1)
-        self.view_directory.setAlternatingRowColors(True);
+        self.view_directory.setAlternatingRowColors(True)
 
         # コールバック関数の設定
         # modelをセットし直すとコネクトが解除される？のでここに設置
@@ -318,7 +322,7 @@ class SceneExplorerWeight(MayaQWidgetBaseMixin, QtGui.QDialog, Ui_Form):
         self.view_history.header().setResizeMode(QtGui.QHeaderView.ResizeToContents)
         self.view_history.header().setVisible(False)
         self.view_history.setModel(self.history_model)
-        self.view_history.setAlternatingRowColors(True);
+        self.view_history.setAlternatingRowColors(True)
 
         his_sel_model = self.view_history.selectionModel()
         his_sel_model.selectionChanged.connect(self.callback_history_change)
@@ -425,14 +429,22 @@ class SceneExplorerWeight(MayaQWidgetBaseMixin, QtGui.QDialog, Ui_Form):
         self.setup_view_file(file_path)
         self.add_path_history()
 
+        self.view_directory.resizeColumnToContents(0)
+        select_path = self.get_view_select(self.view_directory, self.dir_model)
+        self.view_directory.scrollTo(self.dir_model.index(select_path), QtGui.QAbstractItemView.PositionAtCenter)
+
     def callback_filter_change(self):
         self.setup_view_file()
 
     def callback_type_change(self):
         self.setup_view_file()
 
-    def callback_dir_change(self, selected, deselected):
+    def callback_dir_change(self):
         self.view_directory.resizeColumnToContents(0)
+        #vert_pos = self.view_directory.verticalScrollBar().value()
+        #horiz_pos = self.view_directory.horizontalScrollBar().value()
+        #print self.view_directory.verticalScrollBar().maximum()
+        # self.view_directory.horizontalScrollBar().setValue(10)
         self.setup_view_file()
 
     def callback_file_change(self, selected, deselected):
@@ -517,7 +529,7 @@ class SceneExplorerWeight(MayaQWidgetBaseMixin, QtGui.QDialog, Ui_Form):
         if select_model.hasSelection() is False:
             return ''
         for index in select_model.selectedIndexes():
-            if isinstance(model, QtGui.QFileSystemModel):
+            if isinstance(model, (QtGui.QFileSystemModel, QtGui.QDirModel)):
                 file_path = model.filePath(index)
             if isinstance(model, QtGui.QStandardItemModel):
                 file_path = model.data(index)
