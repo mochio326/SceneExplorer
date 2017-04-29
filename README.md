@@ -1,4 +1,4 @@
-# SceneExplorer
+# SceneExplorer [Var.1.1.0]
 
 
 Mayaでシーンファイルを管理する為のエクスプローラです。
@@ -7,14 +7,28 @@ Mayaでシーンファイルを管理する為のエクスプローラです。
 
 ブックマーク機能、履歴、ファイルの絞り込み、読み込み時の自動setProjectなどの機能があります。
 
-## 実行方法
+## インストール
 
-ダウロードしたSceneExplorer.pyをスクリプトフォルダ（C:\Users\ユーザー名\Documents\maya\バージョン\ja_JP\scripts）に入れる。
+1. Clone or download > Download ZIP からZIPファイルをダウンロードしてください。
 
-    import SceneExplorer
-    SceneExplorer.main()
+2. 解凍したSceneExplorerフォルダを `C:\Program Files\Autodesk\ApplicationPlugins` へコピーしてください。  
+MayaをCドライブ以外にインストールしている場合でもSceneExplorerフォルダは `C:\Program Files\Autodesk\ApplicationPlugins` に置く必要があるようです。  
+判断に迷ったらボーナスツールと同じ場所に入れて下さい。
 
-上記コードをスクリプトエディタ(Python)で実行、もしくはシェルフにコマンドを登録してください。
+
++ ApplicationPluginsフォルダが存在しない場合は作成してください。
+
++ 複数バージョンのMayaに対応しています。2014以降のバージョンでは自動的に認識されツールが使える状態になります。
+
++ 不要になった場合はフォルダを削除してください。
+
++ バージョンアップの際は上書きではなく、一度SceneExplorerフォルダを削除すると安全です。
+
+## 実行
+
+メインメニュー > Windows > SceneExplorer から開くことが可能です。  
+もしくは Hotkey Editor > Custom Scripts > SceneExplorer からホットキーを割り振ることもできます。  
+
 
 ## 使い方
 
@@ -36,18 +50,24 @@ Mayaでシーンファイルを管理する為のエクスプローラです。
 
 ![SceneExplorer](/images/sceneexplorer-screenshot-04.gif)
 
-## その他
-
-ui/SceneExplorer.ui はQtDesigner用のファイルですが、SceneExplorer.pyからは読み込んでません。
-SceneExplorer.py単体で動作する方が使いやすいだろうという事でui→py化して組み込んでます。
-
 ## 動作確認
 
-動作確認はMAYA2015でのみ行っています。
-2014～2016辺りでも使えると思いますが、2017ではPySide2になった影響で多分使えません。
+MAYA2015：問題なし
+
+MAYA2016：問題なし
+
+MAYA2017：問題なし
+
 
 ## 改訂履歴
-* 2017.03.15:
-  - パス指定時にフォルダツリーがアクティブな行に自動スクロールすように対応
-* 2017.03.14:
-  - バージョン1.00公開
+
+2017/4/30
++ バージョン1.1.0
++ PackageContents.xml形式に対応。
++ MAYA2016/MAYA2017に対応
+
+2017/03/15
++ パス指定時にフォルダツリーがアクティブな行に自動スクロールすように対応
+  
+2017/03/14
++ バージョン1.00公開
